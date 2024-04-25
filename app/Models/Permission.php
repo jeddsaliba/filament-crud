@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 
-class Tag extends Model
+class Permission extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'name',
+        'slug',
+        'description'
     ];
 
     protected $guarded = [];
@@ -27,12 +26,9 @@ class Tag extends Model
     protected function casts(): array
     {
         return [
-            'name' => 'string'
+            'name' => 'string',
+            'slug' => 'string',
+            'description' => 'string'
         ];
-    }
-
-    public function tasks(): BelongsToMany
-    {
-        return $this->belongsToMany(Task::class);
     }
 }

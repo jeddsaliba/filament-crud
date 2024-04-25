@@ -6,6 +6,7 @@ use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Role;
 use Filament\Forms;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -27,9 +28,19 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                Section::make('Role Information')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Role')
+                            ->required()
+                            ->maxLength(255)
+                    ]),
+                Section::make('Permissions')
+                    ->schema([
+                        Forms\Components\CheckboxList::make('permissions')
+                            ->hiddenLabel()
+                            ->relationship('permissions', 'name')
+                    ])
             ]);
     }
 
@@ -84,5 +95,9 @@ class RoleResource extends Resource
             'create' => Pages\CreateRole::route('/create'),
             'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
+    }
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->where('id', '!=', 1);
     }
 }

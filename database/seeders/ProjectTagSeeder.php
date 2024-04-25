@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Project;
+use App\Models\ProjectTag;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ProjectSeeder extends Seeder
+class ProjectTagSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Project::factory(25)->create();
+        ProjectTag::factory(10)->create();
     }
 }

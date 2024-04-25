@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class User extends Authenticatable
 {
@@ -23,6 +25,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
         'role_id'
     ];
 
@@ -46,6 +49,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'image' => 'string',
             'role_id' => 'integer'
         ];
     }
@@ -63,5 +67,53 @@ class User extends Authenticatable
     protected function tasks(): HasMany
     {
         return $this->hasMany(Task::class, 'assigned_to');
+    }
+
+    /**
+     * API STARTS HERE
+     */
+    public function login($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => [
+                'required',
+                'email',
+                'min: 8',
+                'max: 100'
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min: 8',
+                'max: 100'
+            ]
+        ]);
+        if ($validator->fails()) {
+            $errors = $validator->errors();
+            return (object)['status' => false, 'message' => $errors->first(), 'errors' => $errors];
+        }
+        $login = $request->validate([
+            'email' => [
+                'required',
+                'email',
+                'min: 8',
+                'max: 100'
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min: 8',
+                'max: 100'
+            ]
+        ]);
+        if (!Auth::attempt($login)) {
+            return (object)['status' => false, 'message' => 'Invalid login credentials.', 'errors' => ['error' => 'Invalid login credentials.']];
+        }
+        $user = Auth::user();
+        if (!$user) {
+            return (object)['status' => false, 'message' => 'Invalid login credentials.', 'errors' => ['error' => 'Invalid login credentials.']];
+        }
+        $user = User::find(Auth::user()->id);
+        return (object)['status' => true, 'message' => 'Welcome, ' . $user->name . '!', 'data' => $user];
     }
 }

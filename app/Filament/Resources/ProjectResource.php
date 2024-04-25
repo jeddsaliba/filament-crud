@@ -14,6 +14,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -27,6 +28,8 @@ class ProjectResource extends Resource
     protected static ?int $navigationSort = 0;
 
     protected static ?string $navigationIcon = 'heroicon-o-pencil-square';
+    
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
     {
@@ -38,7 +41,8 @@ class ProjectResource extends Resource
                             ->description(fn($operation) => $operation === 'edit' ? 'Update your project information here.' : 'Enter your new project information here.')
                             ->schema([
                                 Forms\Components\Hidden::make('created_by')
-                                    ->dehydrateStateUsing(fn($state) => Auth::id()),
+                                    ->dehydrateStateUsing(fn($state) => Auth::id())
+                                    ->hiddenOn('edit'),
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255)
@@ -59,7 +63,9 @@ class ProjectResource extends Resource
                                 Forms\Components\FileUpload::make('image')
                                     ->label('Thumbnail')
                                     ->image()
-                                    ->directory('projects/thumbnails'),
+                                    ->directory('projects/thumbnails')
+                                    ->imageEditor()
+                                    ->imageCropAspectRatio('1:1'),
                                 Forms\Components\TextInput::make('slug')
                                     ->required()
                                     ->unique(ignoreRecord: true)
@@ -104,7 +110,7 @@ class ProjectResource extends Resource
                         return $state;
                     })
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('creator.name')
                     ->label('Created By')
                     ->toggleable()
                     ->sortable(),
@@ -122,6 +128,13 @@ class ProjectResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('Tags')
+                    ->relationship('tags', 'name')
+                    ->multiple(),
+                Tables\Filters\SelectFilter::make('Created By')
+                    ->label('Created By')
+                    ->relationship('creator', 'name')
+                    ->multiple(),
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
@@ -153,5 +166,20 @@ class ProjectResource extends Resource
             'create' => Pages\CreateProject::route('/create'),
             'edit' => Pages\EditProject::route('/{record}/edit'),
         ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'slug', 'description', 'creator.name'];
+    }
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Created By' => $record->creator->name
+        ];
+    }
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }

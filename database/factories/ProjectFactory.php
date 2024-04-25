@@ -22,7 +22,7 @@ class ProjectFactory extends Factory
             'name' => fake()->unique()->sentence(3),
             'slug' => fake()->unique()->slug(3),
             'description' => fake()->paragraph(5),
-            'image' => fake()->imageUrl()
+            'image' => fake()->imageUrl(60, 60)
         ];
     }
 }

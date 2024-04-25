@@ -6,13 +6,17 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Support\Facades\Hash;
@@ -27,52 +31,69 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Section::make('Basic Information')
-                    ->description('Please enter user\'s basic information here.')
+                Grid::make()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255)
-                            ->columnSpan(2),
-                        Forms\Components\Select::make('role_id')
-                            ->label('Role')
-                            ->options(\App\Models\Role::all()->pluck('name', 'id'))
-                            ->searchable()
-                            ->selectablePlaceholder(false)
-                            ->required()
-                            ->default(1)
-                            ->columnSpan(1),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
-                            ->unique(ignoreRecord: true)
-                            ->required()
-                            ->maxLength(255)
-                            ->columnSpanFull()
-                    ])->columns(3),
-                Section::make('Password Manager')
-                    ->description('Please enter user\'s password here')
-                    ->schema([
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required()
-                            ->rule(Password::default())
-                            ->maxLength(255)
-                            ->autocomplete('new-password')
-                                ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
-                                ->live(debounce: 500)
-                                ->same('passwordConfirmation')
-                                ->revealable(),
-                        Forms\Components\TextInput::make('passwordConfirmation')
-                            ->label('Confirm Password')
-                            ->password()
-                            ->required()
-                            ->dehydrated(false)
-                            ->revealable(),
-                    ])->hiddenOn('edit')
+                        Section::make('Basic Information')
+                            ->description(fn($operation) => $operation === 'edit' ? 'Update user\'s basic information here.' : 'Please enter user\'s basic information here.')
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->columnSpan(2),
+                                Forms\Components\Select::make('role_id')
+                                    ->label('Role')
+                                    ->options(\App\Models\Role::all()->pluck('name', 'id'))
+                                    ->searchable()
+                                    ->selectablePlaceholder(false)
+                                    ->required()
+                                    ->default(1)
+                                    ->columnSpan(1),
+                                Forms\Components\TextInput::make('email')
+                                    ->email()
+                                    ->unique(ignoreRecord: true)
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->columnSpanFull()
+                            ])->columnSpan(2)
+                            ->columns(3),
+                        Section::make('Profile Photo')
+                            ->description('Upload user\'s profile photo here.')
+                            ->schema([
+                                Forms\Components\FileUpload::make('image')
+                                    ->hiddenLabel()
+                                    ->image()
+                                    ->directory('users/thumbnails')
+                                    ->imageEditor()
+                                    ->imageCropAspectRatio('1:1')
+                            ])->columnSpan(1),
+                        Section::make('Password Manager')
+                            ->description(fn($operation) => $operation === 'edit' ? 'Update user\'s password here' : 'Please enter user\'s password here')
+                            ->schema([
+                                Forms\Components\TextInput::make('password')
+                                    ->password()
+                                    ->required()
+                                    ->rule(Password::default())
+                                    ->maxLength(255)
+                                    ->autocomplete('new-password')
+                                        ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                                        ->live(debounce: 500)
+                                        ->same('passwordConfirmation')
+                                        ->revealable(),
+                                Forms\Components\TextInput::make('passwordConfirmation')
+                                    ->label('Confirm Password')
+                                    ->password()
+                                    ->required()
+                                    ->dehydrated(false)
+                                    ->revealable(),
+                            ])->hiddenOn('edit')
+                            ->columnSpan(2)
+                    ])->columns(3)
             ]);
     }
 
@@ -80,6 +101,8 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Profile Photo'),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
@@ -135,5 +158,28 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getGlobalSearchEloquentQuery(): Builder
+    {
+        return parent::getGlobalSearchEloquentQuery()->whereNot('id', '=', Auth::id());
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'email'];
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            $record->email,
+            $record->role->name
+        ];
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }

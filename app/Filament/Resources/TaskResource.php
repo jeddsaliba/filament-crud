@@ -13,6 +13,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -26,6 +27,8 @@ class TaskResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-document-check';
 
     protected static ?int $navigationSort = 1;
+
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Form $form): Form
     {
@@ -153,6 +156,21 @@ class TaskResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('Status')
+                    ->relationship('status', 'name')
+                    ->multiple()
+                    ->preload(),
+                Tables\Filters\SelectFilter::make('Tags')
+                    ->relationship('tags', 'name')
+                    ->multiple(),
+                Tables\Filters\SelectFilter::make('Assigned To')
+                    ->label('Assigned To')
+                    ->relationship('assigned', 'name')
+                    ->multiple(),
+                Tables\Filters\SelectFilter::make('Created By')
+                    ->label('Created By')
+                    ->relationship('creator', 'name')
+                    ->multiple(),
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
@@ -184,5 +202,21 @@ class TaskResource extends Resource
             'create' => Pages\CreateTask::route('/create'),
             'edit' => Pages\EditTask::route('/{record}/edit'),
         ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['name', 'slug', 'project.name', 'assigned.name'];
+    }
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'Project' => $record->project->name,
+            'Assigned To' => $record->assigned->name
+        ];
+    }
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::count();
     }
 }

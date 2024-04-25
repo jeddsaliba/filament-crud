@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Project;
+use App\Models\TagTask;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class ProjectSeeder extends Seeder
+class TagTaskSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        Project::factory(25)->create();
+        TagTask::factory(10)->create();
     }
 }
