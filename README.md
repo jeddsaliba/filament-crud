@@ -52,7 +52,7 @@ php artisan storage:link
 Assuming that you have already created an empty database, run this command to migrate the database tables:
 
 ```bash
-php artisan migrate
+php artisan migrate --seed
 ```
 
 <a name="create-admin-account"></a>
