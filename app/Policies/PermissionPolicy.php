@@ -46,7 +46,7 @@ class PermissionPolicy
      */
     public function update(User $user, Permission $permission): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['UPDATE']);
+        return Helper::checkPermission($user, [], self::abilities['UPDATE']) && $permission->can_edit;
     }
 
     /**
@@ -54,7 +54,7 @@ class PermissionPolicy
      */
     public function delete(User $user, Permission $permission): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['DELETE']);
+        return Helper::checkPermission($user, [], self::abilities['DELETE']) && $permission->can_delete;
     }
 
     /**
@@ -70,6 +70,6 @@ class PermissionPolicy
      */
     public function forceDelete(User $user, Permission $permission): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']);
+        return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']) && $permission->can_delete;
     }
 }

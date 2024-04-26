@@ -181,7 +181,8 @@ class TaskResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make()
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
             ])
             ->actionsColumnLabel('Actions')
             ->bulkActions([

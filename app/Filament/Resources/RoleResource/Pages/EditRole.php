@@ -15,19 +15,9 @@ class EditRole extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\DeleteAction::make()
-                ->visible(fn(Role $record) => $record->can_delete),
+            Actions\DeleteAction::make(),
             Actions\RestoreAction::make(),
             Actions\ForceDeleteAction::make()
         ];
-    }
-
-    protected function getSaveFormAction(): Action
-    {
-        return Action::make('save')
-            ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
-            ->submit('save')
-            ->keyBindings(['mod+s'])
-            ->visible(fn (Role $record) => $record->can_edit);
     }
 }

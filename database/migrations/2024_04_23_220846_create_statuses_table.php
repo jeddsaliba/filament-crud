@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('statuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->boolean('can_edit')->default(true);
+            $table->boolean('can_delete')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

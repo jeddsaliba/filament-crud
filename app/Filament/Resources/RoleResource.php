@@ -76,12 +76,8 @@ class RoleResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make()
-                    ->visible(fn(Role $record) => $record->can_edit),
-                Tables\Actions\DeleteAction::make()
-                    ->visible(fn(Role $record) => $record->can_delete)
-                    ->hidden(fn(Role $record) => $record->deleted_at),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
             ])
@@ -92,7 +88,7 @@ class RoleResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(), 
                     Tables\Actions\RestoreBulkAction::make()
                 ]),
-            ])->recordUrl(null);
+            ]);
     }
 
     public static function getRelations(): array

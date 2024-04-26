@@ -71,11 +71,8 @@ class PermissionResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->visible(fn (Permission $record) => $record->can_edit)
-                    ->hidden(fn (Permission $record) => $record->deleted_at),
-                Tables\Actions\DeleteAction::make()
-                    ->visible(fn (Permission $record) => $record->can_delete),
+                Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
             ])

@@ -17,16 +17,22 @@ class StatusSeeder extends Seeder
             ->insert([
                 [
                     'name' => 'Pending',
+                    'can_edit' => false,
+                    'can_delete' => false,
                     'created_at' => now(),
                     'updated_at' => now()
                 ],
                 [
                     'name' => 'Ongoing',
+                    'can_edit' => false,
+                    'can_delete' => false,
                     'created_at' => now(),
                     'updated_at' => now()
                 ],
                 [
                     'name' => 'Completed',
+                    'can_edit' => false,
+                    'can_delete' => false,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]

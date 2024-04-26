@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Helpers\Helper;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
 
 class UserPolicy
 {
@@ -29,7 +30,7 @@ class UserPolicy
      */
     public function view(User $user, User $model): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['VIEW']);
+        return Helper::checkPermission($user, [], self::abilities['VIEW']) && $model->id !== Auth::id();
     }
 
     /**
@@ -45,7 +46,7 @@ class UserPolicy
      */
     public function update(User $user, User $model): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['UPDATE']);
+        return Helper::checkPermission($user, [], self::abilities['UPDATE']) && $model->id !== Auth::id();
     }
 
     /**
@@ -53,7 +54,7 @@ class UserPolicy
      */
     public function delete(User $user, User $model): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['DELETE']);
+        return Helper::checkPermission($user, [], self::abilities['DELETE']) && $model->id !== Auth::id();
     }
 
     /**
@@ -61,7 +62,7 @@ class UserPolicy
      */
     public function restore(User $user, User $model): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['RESTORE']);
+        return Helper::checkPermission($user, [], self::abilities['RESTORE']) && $model->id !== Auth::id();
     }
 
     /**
@@ -69,6 +70,6 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']);
+        return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']) && $model->id !== Auth::id();
     }
 }

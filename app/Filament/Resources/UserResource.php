@@ -131,10 +131,10 @@ class UserResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make()
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -144,7 +144,7 @@ class UserResource extends Resource
                 ]),
             ])->query(function (User $query) {
                 return $query->whereNot('id', Auth::id());
-            })->recordUrl(null);
+            });
     }
 
     public static function getRelations(): array
