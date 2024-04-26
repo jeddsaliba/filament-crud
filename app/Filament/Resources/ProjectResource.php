@@ -4,11 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
-use App\Filament\Resources\ProjectResource\RelationManagers\TasksRelationManager;
 use App\Models\Project;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -35,9 +32,9 @@ class ProjectResource extends Resource
     {
         return $form
             ->schema([
-                Grid::make()
+                Forms\Components\Grid::make()
                     ->schema([
-                        Section::make(fn($operation) => $operation === 'edit' ? 'Update Project Information' : 'Create Project Information')
+                        Forms\Components\Section::make(fn($operation) => $operation === 'edit' ? 'Update Project Information' : 'Create Project Information')
                             ->description(fn($operation) => $operation === 'edit' ? 'Update your project information here.' : 'Enter your new project information here.')
                             ->schema([
                                 Forms\Components\Hidden::make('created_by')
@@ -57,7 +54,7 @@ class ProjectResource extends Resource
                                     ->columnSpanFull()
                                     ->fileAttachmentsDirectory('projects/attachments'),
                             ])->columnSpan(2)->columns(3),
-                        Section::make('Meta')
+                        Forms\Components\Section::make('Meta')
                             ->description(fn($operation) => $operation === 'edit' ? 'Update your project meta information here.' : 'Enter your new project meta information here.')
                             ->schema([
                                 Forms\Components\FileUpload::make('image')
@@ -139,6 +136,7 @@ class ProjectResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
@@ -157,7 +155,7 @@ class ProjectResource extends Resource
     public static function getRelations(): array
     {
         return [
-            TasksRelationManager::class
+            ProjectResource\RelationManagers\TasksRelationManager::class
         ];
     }
 

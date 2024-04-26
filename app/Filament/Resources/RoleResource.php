@@ -6,12 +6,9 @@ use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Role;
 use Filament\Forms;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Group;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -32,14 +29,14 @@ class RoleResource extends Resource
     {
         return $form
             ->schema([
-                Section::make('Role Information')
+                Forms\Components\Section::make('Role Information')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('Role')
                             ->required()
                             ->maxLength(255)
                     ]),
-                Section::make('Permissions')
+                Forms\Components\Section::make('Permissions')
                     ->schema([
                         Forms\Components\CheckboxList::make('permissions')
                             ->hiddenLabel()
@@ -76,8 +73,17 @@ class RoleResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->using(function (Role $record) {
+                        if ($record->users) {
+                            Notification::make()
+                                ->danger()
+                                ->send();
+                            return false;
+                        }
+                    }),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
             ])

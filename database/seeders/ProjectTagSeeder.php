@@ -13,6 +13,6 @@ class ProjectTagSeeder extends Seeder
      */
     public function run(): void
     {
-        ProjectTag::factory(10)->create();
+        ProjectTag::factory(100)->create();
     }
 }

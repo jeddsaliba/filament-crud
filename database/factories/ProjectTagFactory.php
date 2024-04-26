@@ -17,8 +17,8 @@ class ProjectTagFactory extends Factory
     public function definition(): array
     {
         return [
-            'project_id' => fake()->numberBetween(1, 25),
-            'tag_id' => fake()->numberBetween(1, 15)
+            'project_id' => fake()->numberBetween(1, 100),
+            'tag_id' => fake()->numberBetween(1, 100)
         ];
     }
 }

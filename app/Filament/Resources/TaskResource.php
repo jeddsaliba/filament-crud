@@ -6,8 +6,6 @@ use App\Filament\Resources\TaskResource\Pages;
 use App\Filament\Resources\TaskResource\RelationManagers;
 use App\Models\Task;
 use Filament\Forms;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -34,9 +32,9 @@ class TaskResource extends Resource
     {
         return $form
             ->schema([
-                Grid::make()
+                Forms\Components\Grid::make()
                     ->schema([
-                        Section::make(fn($operation) => $operation === 'edit' ? 'Update Task Information' : 'Create Task Information')
+                        Forms\Components\Section::make(fn($operation) => $operation === 'edit' ? 'Update Task Information' : 'Create Task Information')
                             ->description(fn($operation) => $operation === 'edit' ? 'Update your task information here.' : 'Enter your new task information here.')
                             ->schema([
                                 Forms\Components\Select::make('project_id')
@@ -82,7 +80,7 @@ class TaskResource extends Resource
                                     ->fileAttachmentsDirectory('tasks/attachments')
                                     ->columnSpanFull()
                             ])->columnSpan(2)->columns(3),
-                        Section::make('Meta')
+                        Forms\Components\Section::make('Meta')
                             ->description(fn($operation) => $operation === 'edit' ? 'Update your task meta information here.' : 'Enter your new task meta information here.')
                             ->schema([
                                 Forms\Components\TextInput::make('slug')
@@ -179,6 +177,7 @@ class TaskResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),

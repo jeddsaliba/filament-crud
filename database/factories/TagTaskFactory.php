@@ -17,8 +17,8 @@ class TagTaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'tag_id' => fake()->numberBetween(1, 15),
-            'task_id' => fake()->numberBetween(1, 25)
+            'tag_id' => fake()->numberBetween(1, 100),
+            'task_id' => fake()->numberBetween(1, 4048)
         ];
     }
 }

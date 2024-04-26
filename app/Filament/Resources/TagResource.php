@@ -27,9 +27,14 @@ class TagResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Section::make(fn($operation) => $operation === 'edit' ? 'Update Tag Information' : 'Create Tag Information')
+                    ->description(fn($operation) => $operation === 'edit' ? 'Update your tag information here.' : 'Enter your new tag information here.')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Tag Name')
+                            ->maxLength(255)
+                            ->required()
+                    ])
             ]);
     }
 
@@ -56,6 +61,7 @@ class TagResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
