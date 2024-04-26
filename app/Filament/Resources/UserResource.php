@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -48,7 +49,8 @@ class UserResource extends Resource
                                     ->columnSpan(2),
                                 Forms\Components\Select::make('role_id')
                                     ->label('Role')
-                                    ->options(\App\Models\Role::all()->pluck('name', 'id'))
+                                    ->relationship('role', 'name')
+                                    ->preload()
                                     ->searchable()
                                     ->selectablePlaceholder(false)
                                     ->required()
@@ -69,7 +71,7 @@ class UserResource extends Resource
                                     ->hiddenLabel()
                                     ->image()
                                     ->directory('users/thumbnails')
-                                    ->imageEditor()
+                                    ->imageEditor(fn($operation) => $operation !== 'view')
                                     ->imageCropAspectRatio('1:1')
                             ])->columnSpan(1),
                         Section::make('Password Manager')
@@ -91,7 +93,7 @@ class UserResource extends Resource
                                     ->required()
                                     ->dehydrated(false)
                                     ->revealable(),
-                            ])->hiddenOn('edit')
+                            ])->visibleOn('create')
                             ->columnSpan(2)
                     ])->columns(3)
             ]);
@@ -129,6 +131,7 @@ class UserResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make()
@@ -141,7 +144,7 @@ class UserResource extends Resource
                 ]),
             ])->query(function (User $query) {
                 return $query->whereNot('id', Auth::id());
-            });
+            })->recordUrl(null);
     }
 
     public static function getRelations(): array

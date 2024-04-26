@@ -17,16 +17,22 @@ class RoleSeeder extends Seeder
             ->insert([
                 [
                     'name' => 'Administrator',
+                    'can_edit' => false,
+                    'can_delete' => false,
                     'created_at' => now(),
                     'updated_at' => now()
                 ],
                 [
                     'name' => 'Manager',
+                    'can_edit' => true,
+                    'can_delete' => false,
                     'created_at' => now(),
                     'updated_at' => now()
                 ],
                 [
                     'name' => 'User',
+                    'can_edit' => true,
+                    'can_delete' => false,
                     'created_at' => now(),
                     'updated_at' => now()
                 ]

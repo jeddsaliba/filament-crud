@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description');
+            $table->boolean('can_edit')->default(true);
+            $table->boolean('can_delete')->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

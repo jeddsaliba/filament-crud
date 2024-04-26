@@ -47,7 +47,8 @@ class TaskResource extends Resource
                                     ->columnSpanFull()
                                     ->hiddenOn('edit'),
                                 Forms\Components\Hidden::make('created_by')
-                                    ->dehydrateStateUsing(fn($state) => Auth::id()),
+                                    ->dehydrateStateUsing(fn($state) => Auth::id())
+                                    ->hiddenOn('edit'),
                                 Forms\Components\TextInput::make('name')
                                     ->required()
                                     ->maxLength(255)
@@ -57,15 +58,18 @@ class TaskResource extends Resource
                                         $set('slug', Str::slug($state));
                                     })->columnSpan(2),
                                 Forms\Components\Select::make('status_id')
-                                    ->relationship('status', 'name')
-                                    ->selectablePlaceholder(false)
                                     ->default(1)
-                                    ->required(),
+                                    ->preload()
+                                    ->relationship('status', 'name')
+                                    ->required()
+                                    ->searchable()
+                                    ->selectablePlaceholder(false),
                                 Forms\Components\Select::make('assigned_to')
                                     ->label('Assigned To')
                                     ->relationship('assigned', 'name')
                                     ->selectablePlaceholder(false)
                                     ->searchable()
+                                    ->preload()
                                     ->required(),
                                 Forms\Components\DatePicker::make('start_date')
                                     ->default(now())
@@ -87,10 +91,11 @@ class TaskResource extends Resource
                                     ->maxLength(255)
                                     ->columnSpanFull(),
                                 Forms\Components\Select::make('tags')
+                                    ->columnSpanFull()
+                                    ->multiple()
+                                    ->placeholder('Select tag(s)')
                                     ->relationship('tags', 'name')
                                     ->searchable()
-                                    ->multiple()
-                                    ->columnSpanFull()
                             ])->columnSpan(1)
                     ])->columns(3)
             ]);

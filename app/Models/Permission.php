@@ -13,7 +13,9 @@ class Permission extends Model
     protected $fillable = [
         'name',
         'slug',
-        'description'
+        'description',
+        'can_edit',
+        'can_delete'
     ];
 
     protected $guarded = [];
@@ -28,7 +30,9 @@ class Permission extends Model
         return [
             'name' => 'string',
             'slug' => 'string',
-            'description' => 'string'
+            'description' => 'string',
+            'can_edit' => 'boolean',
+            'can_delete' => 'boolean'
         ];
     }
 }

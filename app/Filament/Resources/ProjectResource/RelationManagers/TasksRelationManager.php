@@ -67,6 +67,7 @@ class TasksRelationManager extends RelationManager
                                     ->maxLength(255)
                                     ->columnSpanFull(),
                                 Forms\Components\Select::make('tags')
+                                    ->placeholder('Select tag(s)')
                                     ->relationship('tags', 'name')
                                     ->searchable()
                                     ->multiple()

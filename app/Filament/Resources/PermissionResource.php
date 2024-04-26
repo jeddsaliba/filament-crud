@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TagResource\Pages;
-use App\Filament\Resources\TagResource\RelationManagers;
-use App\Models\Tag;
+use App\Filament\Resources\PermissionResource\Pages;
+use App\Filament\Resources\PermissionResource\RelationManagers;
+use App\Models\Permission;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -12,16 +12,17 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
-class TagResource extends Resource
+class PermissionResource extends Resource
 {
-    protected static ?string $model = Tag::class;
+    protected static ?string $model = Permission::class;
 
     protected static ?string $navigationGroup = 'Settings';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 4;
 
-    protected static ?string $navigationIcon = 'heroicon-o-hashtag';
+    protected static ?string $navigationIcon = 'heroicon-o-key';
 
     public static function form(Form $form): Form
     {
@@ -29,7 +30,19 @@ class TagResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->maxLength(255)
+                    ->live(debounce: 500)
+                    ->afterStateUpdated(function ($operation, $state, $set) {
+                        if ($operation === 'edit') return;
+                        $set('slug', Str::slug($state));
+                    }),
+                Forms\Components\TextInput::make('slug')
+                    ->required()
+                    ->unique(ignoreRecord: true)
                     ->maxLength(255),
+                Forms\Components\RichEditor::make('description')
+                    ->required()
+                    ->columnSpanFull()
             ]);
     }
 
@@ -38,6 +51,8 @@ class TagResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -56,9 +71,13 @@ class TagResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make()
+                Tables\Actions\EditAction::make()
+                    ->visible(fn (Permission $record) => $record->can_edit)
+                    ->hidden(fn (Permission $record) => $record->deleted_at),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn (Permission $record) => $record->can_delete),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
             ])
             ->actionsColumnLabel('Actions')
             ->bulkActions([
@@ -80,9 +99,9 @@ class TagResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListTags::route('/'),
-            'create' => Pages\CreateTag::route('/create'),
-            'edit' => Pages\EditTag::route('/{record}/edit'),
+            'index' => Pages\ListPermissions::route('/'),
+            'create' => Pages\CreatePermission::route('/create'),
+            'edit' => Pages\EditPermission::route('/{record}/edit'),
         ];
     }
 }

@@ -3,18 +3,19 @@
 namespace App\Policies;
 
 use App\Helpers\Helper;
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 
-class UserPolicy
+class TagPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-user',
-        'CREATE' => 'create-user',
-        'UPDATE' => 'update-user',
-        'DELETE' => 'delete-user',
-        'RESTORE' => 'restore-user',
-        'FORCE_DELETE' => 'force-delete-user'
+        'VIEW' => 'view-tag',
+        'CREATE' => 'create-tag',
+        'UPDATE' => 'update-tag',
+        'DELETE' => 'delete-tag',
+        'RESTORE' => 'restore-tag',
+        'FORCE_DELETE' => 'force-delete-tag'
     ];
     /**
      * Determine whether the user can view any models.
@@ -27,7 +28,7 @@ class UserPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, User $model): bool
+    public function view(User $user, Tag $tag): bool
     {
         return Helper::checkPermission($user, [], self::abilities['VIEW']);
     }
@@ -43,7 +44,7 @@ class UserPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, User $model): bool
+    public function update(User $user, Tag $tag): bool
     {
         return Helper::checkPermission($user, [], self::abilities['UPDATE']);
     }
@@ -51,7 +52,7 @@ class UserPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, Tag $tag): bool
     {
         return Helper::checkPermission($user, [], self::abilities['DELETE']);
     }
@@ -59,7 +60,7 @@ class UserPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, User $model): bool
+    public function restore(User $user, Tag $tag): bool
     {
         return Helper::checkPermission($user, [], self::abilities['RESTORE']);
     }
@@ -67,7 +68,7 @@ class UserPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, User $model): bool
+    public function forceDelete(User $user, Tag $tag): bool
     {
         return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']);
     }

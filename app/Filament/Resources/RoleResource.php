@@ -6,8 +6,12 @@ use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Role;
 use Filament\Forms;
+use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -39,7 +43,12 @@ class RoleResource extends Resource
                     ->schema([
                         Forms\Components\CheckboxList::make('permissions')
                             ->hiddenLabel()
-                            ->relationship('permissions', 'name')
+                            ->relationship('permissions', 'name',
+                                modifyQueryUsing: fn(Builder $query) => $query->orderBy('id')
+                            )
+                            ->bulkToggleable()
+                            ->searchable()
+                            ->columns(4)
                     ])
             ]);
     }
@@ -67,9 +76,14 @@ class RoleResource extends Resource
                 Tables\Filters\TrashedFilter::make()
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make()
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn(Role $record) => $record->can_edit),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn(Role $record) => $record->can_delete)
+                    ->hidden(fn(Role $record) => $record->deleted_at),
+                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ForceDeleteAction::make()
             ])
             ->actionsColumnLabel('Actions')
             ->bulkActions([
@@ -78,7 +92,7 @@ class RoleResource extends Resource
                     Tables\Actions\ForceDeleteBulkAction::make(), 
                     Tables\Actions\RestoreBulkAction::make()
                 ]),
-            ]);
+            ])->recordUrl(null);
     }
 
     public static function getRelations(): array
@@ -98,6 +112,16 @@ class RoleResource extends Resource
     }
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->where('id', '!=', 1);
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                
+            ]);
     }
 }

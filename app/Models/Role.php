@@ -12,7 +12,9 @@ class Role extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'name'
+        'name',
+        'can_edit',
+        'can_delete'
     ];
 
     protected $guarded = [];
@@ -25,7 +27,9 @@ class Role extends Model
     protected function casts(): array
     {
         return [
-            'name' => 'string'
+            'name' => 'string',
+            'can_edit' => 'boolean',
+            'can_delete' => 'boolean'
         ];
     }
 
