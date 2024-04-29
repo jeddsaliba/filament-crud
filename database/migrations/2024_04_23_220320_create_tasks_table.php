@@ -16,13 +16,9 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Project::class);
-            $table->foreignIdFor(User::class, 'created_by');
-            $table->foreignIdFor(User::class, 'assigned_to');
             $table->string('name');
             $table->string('slug');
             $table->text('description');
-            $table->foreignIdFor(Status::class);
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();

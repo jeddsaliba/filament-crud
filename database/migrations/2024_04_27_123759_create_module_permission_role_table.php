@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\Module;
+use App\Models\Permission;
+use App\Models\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,15 +14,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('permissions', function (Blueprint $table) {
+        Schema::create('module_permission_role', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('slug');
-            $table->text('description');
-            $table->boolean('can_edit')->default(true);
-            $table->boolean('can_delete')->default(true);
+            $table->foreignIdFor(Module::class)->restrictOnDelete()->constrained();
+            $table->foreignIdFor(Permission::class)->restrictOnDelete()->constrained();
+            $table->foreignIdFor(Role::class)->restrictOnDelete()->constrained();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('permissions');
+        Schema::dropIfExists('module_permission_role');
     }
 };

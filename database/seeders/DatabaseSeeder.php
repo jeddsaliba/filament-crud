@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,16 +19,18 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
-            ProjectSeeder::class,
             RoleSeeder::class,
-            StatusSeeder::class,
-            TagSeeder::class,
-            TaskSeeder::class,
+            ModuleSeeder::class,
+            PermissionSeeder::class,
             UserSeeder::class,
+            StatusSeeder::class,
+            ProjectSeeder::class,
+            TaskSeeder::class,
+            TagSeeder::class,
             ProjectTagSeeder::class,
             TagTaskSeeder::class,
-            PermissionSeeder::class,
-            PermissionRoleSeeder::class
+            ModuleRoleSeeder::class,
+            ModulePermissionRoleSeeder::class
         ]);
     }
 }

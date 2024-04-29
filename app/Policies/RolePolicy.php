@@ -47,7 +47,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['UPDATE']) && $role->can_edit;
+        return Helper::checkPermission($user, [], self::abilities['UPDATE']);
     }
 
     /**

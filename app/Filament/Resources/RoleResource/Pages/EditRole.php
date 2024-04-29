@@ -7,6 +7,7 @@ use App\Models\Role;
 use Filament\Actions;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Database\Eloquent\Model;
 
 class EditRole extends EditRecord
 {

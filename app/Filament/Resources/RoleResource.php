@@ -4,8 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
+use App\Models\Module;
+use App\Models\Permission;
 use App\Models\Role;
+use Closure;
+use CodeWithDennis\FilamentSelectTree\SelectTree;
 use Filament\Forms;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Component;
+use Filament\Forms\Components\Group;
+use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
@@ -13,6 +23,7 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RoleResource extends Resource
@@ -24,29 +35,52 @@ class RoleResource extends Resource
     protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
-
+    
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\Section::make('Role Information')
+                    ->description(fn($operation) => $operation === 'edit' ? 'Update role\'s basic information here.' : 'Please enter role\'s basic information here.')
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('Role')
                             ->required()
                             ->maxLength(255)
                     ]),
-                Forms\Components\Section::make('Permissions')
+                Forms\Components\Section::make('Choose Modules')
+                    ->description('Enable permissions for each module.')
                     ->schema([
-                        Forms\Components\CheckboxList::make('permissions')
+                        Repeater::make('modules')
                             ->hiddenLabel()
-                            ->relationship('permissions', 'name',
-                                modifyQueryUsing: fn(Builder $query) => $query->orderBy('id')
-                            )
-                            ->bulkToggleable()
-                            ->searchable()
-                            ->columns(4)
-                    ])
+                            ->relationship('modules')
+                            ->itemLabel(fn($state) => $state['name'])
+                            ->schema([
+                                CheckboxList::make('permissions')
+                                    ->hiddenLabel()
+                                    ->relationship('permissions', 'name', function (Builder $query, Forms\Get $get, CheckboxList $component) {
+                                        $roleId = $get('role_id');
+                                        $moduleId = $get('module_id');
+                                        $selectedPermissionIds = $component->getModelInstance()->permissions()->where(['permissions.module_id' => $moduleId, 'role_id' => $roleId])->pluck('permissions.id')->toArray();
+                                        $component->state($selectedPermissionIds);
+                                        return $query->where(['permissions.module_id' => $moduleId]);
+                                    })
+                                    ->saveRelationshipsUsing(static function (CheckboxList $component, ?array $state, Forms\Get $get) {
+                                        $roleId = $get('role_id');
+                                        $newState = [];
+                                        foreach ($state as $permissionId) {
+                                            $newState[$permissionId] =  ['role_id' => $roleId]; 
+                                        }
+                                        $component->getRelationship()->wherePivot('role_id', $roleId)->sync($newState ?? []);
+                                    })
+                                    ->bulkToggleable()
+                                    ->searchable()
+                                    ->columns(3)
+                            ])
+                            ->deletable(false)
+                            ->addable(false)
+                            ->collapsible()
+                    ])->visibleOn('edit')
             ]);
     }
 

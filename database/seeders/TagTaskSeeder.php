@@ -13,6 +13,6 @@ class TagTaskSeeder extends Seeder
      */
     public function run(): void
     {
-        TagTask::factory(100)->create();
+        TagTask::factory(50)->create();
     }
 }
