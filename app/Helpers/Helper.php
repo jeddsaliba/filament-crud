@@ -17,7 +17,7 @@ class Helper
 
     public static function checkPermission(User $user, array $abilities = [], string $ability = null): bool
     {
-        $canAccessModule = $user->role->permissions->pluck('slug');
+        $canAccessModule = $user->role->accessPermissions->pluck('slug');
         if ($abilities) {
             return $canAccessModule->filter(function ($permission) use ($abilities) {
                 return in_array($permission, $abilities);

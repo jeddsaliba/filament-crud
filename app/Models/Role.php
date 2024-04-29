@@ -33,14 +33,21 @@ class Role extends Model
             'can_delete' => 'boolean'
         ];
     }
-
+    
     protected function users(): HasMany
     {
         return $this->hasMany(User::class);
     }
 
-    public function permissions(): BelongsToMany
+    public function modules(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class);
+        $modulesTable = (new Module())->getTable();
+        return $this->belongsToMany(Module::class)->orderBy("$modulesTable.name", 'asc');
+    }
+
+    public function accessPermissions(): BelongsToMany
+    {
+        $modulePermissionRoleTable = (new ModulePermissionRole)->getTable();
+        return $this->belongsToMany(Permission::class, $modulePermissionRoleTable);
     }
 }
