@@ -66,7 +66,10 @@ class UserResource extends Resource
                             Forms\Components\TextInput::make('name')
                                 ->required()
                                 ->maxLength(255)
-                                ->columnSpan(2),
+                                ->columnSpan([
+                                    'xl' => 2,
+                                    'lg' => 1
+                                ]),
                             Forms\Components\Select::make('role_id')
                                 ->label('Role')
                                 ->relationship('role', 'name')
@@ -75,7 +78,10 @@ class UserResource extends Resource
                                 ->selectablePlaceholder(false)
                                 ->required()
                                 ->default(1)
-                                ->columnSpan(1),
+                                ->columnSpan([
+                                    'xl' => 1,
+                                    'lg' => 1
+                                ]),
                             Forms\Components\TextInput::make('email')
                                 ->email()
                                 ->unique(ignoreRecord: true)
@@ -83,8 +89,15 @@ class UserResource extends Resource
                                 ->maxLength(255)
                                 ->columnSpanFull()
                         ])
-                        ->columnSpan(2)
-                        ->columns(3),
+                        ->columns([
+                            'xl' => 3,
+                            'lg' => 1,
+                            'md' => 2
+                        ])
+                        ->columnSpan([
+                            'xl' => 2,
+                            'lg' => 1
+                        ]),
                         Section::make('Profile Photo')
                             ->description('Upload user\'s profile photo here.')
                             ->schema([
@@ -94,7 +107,9 @@ class UserResource extends Resource
                                     ->directory('users/thumbnails')
                                     ->imageEditor(fn($operation) => $operation !== 'view')
                                     ->imageCropAspectRatio('1:1')
-                            ])->columnSpan(1),
+                            ])->columnSpan([
+                                'xl' => 1
+                            ]),
                         Section::make('Password Manager')
                             ->description(function($operation) {
                                 $description = null;
@@ -123,8 +138,14 @@ class UserResource extends Resource
                                     ->dehydrated(false)
                                     ->revealable(),
                             ])->visibleOn('create')
-                            ->columnSpan(2)
-                    ])->columns(3)
+                            ->columnSpan([
+                                'xl' => 2,
+                                'lg' => 1
+                            ])
+                    ])->columns([
+                        'xl' => 3,
+                        'lg' => 1
+                    ])
             ]);
     }
 
