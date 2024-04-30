@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Notifications;
 use App\Filament\Resources\RoleResource\Pages;
 use App\Filament\Resources\RoleResource\RelationManagers;
 use App\Models\Module;
@@ -109,10 +110,24 @@ class RoleResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function (Role $record) {
+                        if ($record->users->isNotEmpty()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(Notifications::DEFAULT_FAILED_TITLE)
+                                ->body(Notifications::ROLE_DELETE_FAILED_BODY)
+                                ->send();
+                            return;
+                        }
+                        Notification::make()
+                            ->success()
+                            ->title(Notifications::DEFAULT_SUCCESS_TITLE)
+                            ->send();
+                        $record->delete();
+                    }),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
-                    ->hidden(fn(Role $record) => $record->users->isNotEmpty())
             ])
             ->actionsColumnLabel('Actions')
             ->bulkActions([

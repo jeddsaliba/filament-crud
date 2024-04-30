@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Profile;
+use App\Filament\Resources\StatusResource\Widgets\StatusChartWidget;
 use App\Filament\Resources\TagResource\Widgets\TagChartWidget;
 use App\Filament\Resources\TaskResource\Widgets\TasksWidget;
 use Filament\Http\Middleware\Authenticate;
@@ -48,6 +49,7 @@ class AdminPanelProvider extends PanelProvider
             ->widgets([
                 Widgets\AccountWidget::class,
                 Widgets\FilamentInfoWidget::class,
+                StatusChartWidget::class,
                 TagChartWidget::class,
                 TasksWidget::class
             ])

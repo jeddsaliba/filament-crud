@@ -17,6 +17,7 @@ class StatusSeeder extends Seeder
             ->insert([
                 [
                     'name' => 'Pending',
+                    'color' => '#dc2626',
                     'can_edit' => false,
                     'can_delete' => false,
                     'created_at' => now(),
@@ -24,6 +25,7 @@ class StatusSeeder extends Seeder
                 ],
                 [
                     'name' => 'Ongoing',
+                    'color' => '#d97706',
                     'can_edit' => false,
                     'can_delete' => false,
                     'created_at' => now(),
@@ -31,6 +33,7 @@ class StatusSeeder extends Seeder
                 ],
                 [
                     'name' => 'Completed',
+                    'color' => '#16a34a',
                     'can_edit' => false,
                     'can_delete' => false,
                     'created_at' => now(),

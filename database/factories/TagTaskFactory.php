@@ -18,7 +18,7 @@ class TagTaskFactory extends Factory
     {
         return [
             'tag_id' => fake()->numberBetween(1, 30),
-            'task_id' => fake()->numberBetween(1, 50)
+            'task_id' => fake()->numberBetween(1, 1999)
         ];
     }
 }

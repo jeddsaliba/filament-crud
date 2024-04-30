@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Notifications;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Role;
@@ -11,6 +12,7 @@ use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -134,7 +136,36 @@ class UserResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function (User $record) {
+                        if ($record->projects->isNotEmpty()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(Notifications::DEFAULT_FAILED_TITLE)
+                                ->body(Notifications::USER_PROJECT_CREATED_DELETE_FAILED_BODY)
+                                ->send();
+                            return;
+                        } else if ($record->tasksCreated->isNotEmpty()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(Notifications::DEFAULT_FAILED_TITLE)
+                                ->body(Notifications::USER_TASK_CREATED_DELETE_FAILED_BODY)
+                                ->send();
+                            return;
+                        } else if ($record->tasks->isNotEmpty()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(Notifications::DEFAULT_FAILED_TITLE)
+                                ->body(Notifications::USER_TASK_ASSIGNED_DELETE_FAILED_BODY)
+                                ->send();
+                            return;
+                        }
+                        Notification::make()
+                            ->success()
+                            ->title(Notifications::DEFAULT_SUCCESS_TITLE)
+                            ->send();
+                        $record->delete();
+                    }),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
             ])

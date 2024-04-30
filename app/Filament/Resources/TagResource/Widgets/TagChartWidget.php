@@ -16,11 +16,11 @@ class TagChartWidget extends ChartWidget
 
     protected static ?string $description = 'Commonly used tags for projects and tasks.';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = '1';
 
     protected static ?int $sort = 1;
 
-    protected static string $color = 'primary';
+    protected static string $color = 'success';
 
     protected static ?array $options = [
         'plugins' => [

@@ -22,6 +22,5 @@ class CreateModule extends CreateRecord
                 'module_id' => $id
             ]);
         });
-        // Runs after the form fields are saved to the database.
     }
 }
