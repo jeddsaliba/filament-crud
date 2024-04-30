@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Notifications;
 use App\Filament\Resources\ModuleResource\Pages;
 use App\Filament\Resources\ModuleResource\RelationManagers;
 use App\Models\Module;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -129,7 +131,22 @@ class ModuleResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function (Module $record) {
+                        if ($record->modulePermissions->isNotEmpty()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(Notifications::DEFAULT_FAILED_TITLE)
+                                ->body(Notifications::MODULE_DELETE_FAILED_BODY)
+                                ->send();
+                            return;
+                        }
+                        Notification::make()
+                            ->success()
+                            ->title(Notifications::DEFAULT_SUCCESS_TITLE)
+                            ->send();
+                        $record->delete();
+                    }),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
             ])

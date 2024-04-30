@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Notifications;
 use App\Filament\Resources\PermissionResource\Pages;
 use App\Filament\Resources\PermissionResource\RelationManagers;
+use App\Models\Module;
 use App\Models\Permission;
 use Filament\Forms;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -50,6 +53,12 @@ class PermissionResource extends Resource
                     return $description;
                 })
                 ->schema([
+                    Forms\Components\Select::make('module_id')
+                        ->relationship('module', 'name')
+                        ->selectablePlaceholder(false)
+                        ->searchable()
+                        ->required()
+                        ->columnSpanFull(),
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(255)
@@ -110,6 +119,10 @@ class PermissionResource extends Resource
                     })
                     ->html()
                     ->toggleable(),
+                Tables\Columns\SelectColumn::make('module_id')
+                    ->options(Module::all()->pluck('name', 'id'))
+                    ->selectablePlaceholder(false)
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -129,7 +142,22 @@ class PermissionResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->action(function (Permission $record) {
+                        if ($record->modulePermissionRole->isNotEmpty()) {
+                            Notification::make()
+                                ->danger()
+                                ->title(Notifications::DEFAULT_FAILED_TITLE)
+                                ->body(Notifications::PERMISSION_DELETE_FAILED_BODY)
+                                ->send();
+                            return;
+                        }
+                        Notification::make()
+                            ->success()
+                            ->title(Notifications::DEFAULT_SUCCESS_TITLE)
+                            ->send();
+                        $record->delete();
+                    }),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
             ])
