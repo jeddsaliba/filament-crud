@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
 use App\Filament\Resources\TagResource\RelationManagers;
+use App\Filament\Resources\TagResource\RelationManagers\ProjectsRelationManager;
+use App\Filament\Resources\TagResource\RelationManagers\TasksRelationManager;
 use App\Models\Tag;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -43,7 +45,12 @@ class TagResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('total_tasks')
+                    ->label('# of Tasks'),
+                Tables\Columns\TextColumn::make('total_projects')
+                    ->label('# of Projects'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -56,7 +63,7 @@ class TagResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-            ])
+            ])->defaultSort('name')
             ->filters([
                 Tables\Filters\TrashedFilter::make()
             ])
@@ -80,7 +87,8 @@ class TagResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ProjectsRelationManager::class,
+            TasksRelationManager::class
         ];
     }
 

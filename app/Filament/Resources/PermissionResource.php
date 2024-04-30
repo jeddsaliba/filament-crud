@@ -31,21 +31,42 @@ class PermissionResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255)
-                    ->live(debounce: 500)
-                    ->afterStateUpdated(function ($operation, $state, $set) {
-                        if ($operation === 'edit') return;
-                        $set('slug', Str::slug($state));
-                    }),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->unique(ignoreRecord: true)
-                    ->maxLength(255),
-                Forms\Components\RichEditor::make('description')
-                    ->required()
-                    ->columnSpanFull()
+                Forms\Components\Section::make(function($operation) {
+                    $title = 'Permission Information';
+                    switch($operation) {
+                        case 'edit': $title = "Update $title"; break;
+                        case 'create': $title = "Create $title"; break;
+                        default: $title; break;
+                    }
+                    return $title;
+                })
+                ->description(function($operation) {
+                    $description = null;
+                    switch($operation) {
+                        case 'edit': $description = "Update your permission information here."; break;
+                        case 'create': $description = "Enter your new permission information here."; break;
+                        default: $description; break;
+                    }
+                    return $description;
+                })
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(255)
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function ($operation, $state, $set) {
+                            if ($operation === 'edit') return;
+                            $set('slug', Str::slug($state));
+                        }),
+                    Forms\Components\TextInput::make('slug')
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255),
+                    Forms\Components\RichEditor::make('description')
+                        ->required()
+                        ->columnSpanFull()
+                        ->fileAttachmentsDirectory('permissions/attachments'),
+                ])
             ]);
     }
 
@@ -54,9 +75,41 @@ class PermissionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->sortable()
+                    ->searchable()
+                    ->limit(25)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+                        return $state;
+                    }),
                 Tables\Columns\TextColumn::make('slug')
-                    ->searchable(),
+                    ->sortable()
+                    ->searchable()
+                    ->limit(25)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+                        return $state;
+                    })
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->sortable()
+                    ->searchable()
+                    ->limit(25)
+                    ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
+                        $state = $column->getState();
+                        if (strlen($state) <= $column->getCharacterLimit()) {
+                            return null;
+                        }
+                        return $state;
+                    })
+                    ->html()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

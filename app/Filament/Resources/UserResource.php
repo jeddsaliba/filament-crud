@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Models\Role;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\Grid;
@@ -111,7 +112,7 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\SelectColumn::make('role_id')
                     ->label('Role')
-                    ->options(\App\Models\Role::all()->pluck('name', 'id'))
+                    ->options(Role::withTrashed()->pluck('name', 'id'))
                     ->selectablePlaceholder(false)
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

@@ -21,6 +21,10 @@ class Tag extends Model
 
     protected $guarded = [];
 
+    protected $appends = [
+        'total_tasks',
+        'total_projects'
+    ];
     /**
      * Get the attributes that should be cast.
      *
@@ -38,6 +42,11 @@ class Tag extends Model
         return $this->belongsToMany(Task::class);
     }
 
+    public function projects(): BelongsToMany
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
     public function tagChart()
     {
         $tagProjectQuery = ProjectTag::select('tag_id');
@@ -49,5 +58,15 @@ class Tag extends Model
             ->orderBy('total_tags', 'desc')
             ->limit(10);
         return $query->get();
+    }
+
+    public function getTotalTasksAttribute(): int
+    {
+        return $this->belongsToMany(Task::class)->count();
+    }
+
+    public function getTotalProjectsAttribute(): int
+    {
+        return $this->belongsToMany(Project::class)->count();
     }
 }

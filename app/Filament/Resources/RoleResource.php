@@ -109,17 +109,10 @@ class RoleResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
-                    ->using(function (Role $record) {
-                        if ($record->users) {
-                            Notification::make()
-                                ->danger()
-                                ->send();
-                            return false;
-                        }
-                    }),
+                Tables\Actions\DeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),
                 Tables\Actions\ForceDeleteAction::make()
+                    ->hidden(fn(Role $record) => $record->users->isNotEmpty())
             ])
             ->actionsColumnLabel('Actions')
             ->bulkActions([
