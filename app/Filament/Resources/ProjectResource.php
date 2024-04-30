@@ -71,7 +71,9 @@ class ProjectResource extends Resource
                                 ->required()
                                 ->columnSpanFull()
                                 ->fileAttachmentsDirectory('projects/attachments'),
-                        ])->columnSpan(2)->columns(3),
+                        ])->columnSpan([
+                            'lg' => 2
+                        ])->columns(3),
                         Forms\Components\Section::make('Meta')
                             ->description(function($operation) {
                                 $description = null;
@@ -100,7 +102,9 @@ class ProjectResource extends Resource
                                     ->searchable()
                                     ->multiple()
                                     ->columnSpanFull()
-                            ])->columnSpan(1)
+                            ])->columnSpan([
+                                'lg' => 1
+                            ])
                     ])->columns(3)
             ]);
     }
