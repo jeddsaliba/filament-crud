@@ -19,6 +19,8 @@ class StatusResource extends Resource
     
     protected static ?string $navigationLabel = 'Status';
 
+    protected static ?string $pluralLabel = 'Status';
+
     protected static ?string $navigationGroup = 'Settings';
 
     protected static ?int $navigationSort = 6;
@@ -29,9 +31,14 @@ class StatusResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Section::make('Status Information')
+                    ->description(fn($operation) => $operation === 'edit' ? 'Update status\' information here.' : 'Please enter status\' information here.')
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Status')
+                            ->required()
+                            ->maxLength(255),
+                    ])
             ]);
     }
 

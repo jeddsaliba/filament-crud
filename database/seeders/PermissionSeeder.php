@@ -397,5 +397,59 @@ class PermissionSeeder extends Seeder
                     'can_delete' => false
                 ]
             ]);
+        /**
+         * INSERT MODULES FOR PERMISSION MODULE
+         */
+        DB::table('permissions')
+            ->insert([
+                [
+                    'module_id' => 8,
+                    'name' => 'Create Module',
+                    'slug' => 'create-module',
+                    'description' => 'Ability to create a new module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 8,
+                    'name' => 'Update Module',
+                    'slug' => 'update-module',
+                    'description' => 'Ability to update an existing module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 8,
+                    'name' => 'Delete Module',
+                    'slug' => 'delete-module',
+                    'description' => 'Ability to delete a module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 8,
+                    'name' => 'Force Delete Module',
+                    'slug' => 'force-delete-module',
+                    'description' => 'Ability to force delete a module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 8,
+                    'name' => 'View Module',
+                    'slug' => 'view-module',
+                    'description' => 'Ability to view a module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 8,
+                    'name' => 'Restore Module',
+                    'slug' => 'restore-module',
+                    'description' => 'Ability to restore a deleted module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ]
+            ]);
     }
 }

@@ -80,7 +80,7 @@ class RoleResource extends Resource
                             ->deletable(false)
                             ->addable(false)
                             ->collapsible()
-                    ])->visibleOn('edit')
+                    ])->hiddenOn('create')
             ]);
     }
 

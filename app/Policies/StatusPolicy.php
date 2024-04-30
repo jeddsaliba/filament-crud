@@ -46,7 +46,7 @@ class StatusPolicy
      */
     public function update(User $user, Status $status): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['UPDATE']);
+        return Helper::checkPermission($user, [], self::abilities['UPDATE']) && $status->can_edit;
     }
 
     /**
@@ -54,7 +54,7 @@ class StatusPolicy
      */
     public function delete(User $user, Status $status): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['DELETE']);
+        return Helper::checkPermission($user, [], self::abilities['DELETE']) && $status->can_delete;
     }
 
     /**
@@ -62,7 +62,7 @@ class StatusPolicy
      */
     public function restore(User $user, Status $status): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['RESTORE']);
+        return Helper::checkPermission($user, [], self::abilities['RESTORE']) && $status->can_delete;
     }
 
     /**
@@ -70,6 +70,6 @@ class StatusPolicy
      */
     public function forceDelete(User $user, Status $status): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']);
+        return Helper::checkPermission($user, [], self::abilities['FORCE_DELETE']) && $status->can_delete;
     }
 }

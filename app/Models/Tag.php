@@ -13,6 +13,8 @@ class Tag extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $table = 'tags';
+
     protected $fillable = [
         'name'
     ];
@@ -34,5 +36,18 @@ class Tag extends Model
     public function tasks(): BelongsToMany
     {
         return $this->belongsToMany(Task::class);
+    }
+
+    public function tagChart()
+    {
+        $tagProjectQuery = ProjectTag::select('tag_id');
+        $unionQuery = TagTask::select('tag_id')->unionAll($tagProjectQuery);
+        $query = DB::table(DB::raw("({$unionQuery->toSql()}) AS merged_tags"))
+            ->selectRaw("merged_tags.tag_id, count(merged_tags.tag_id) as total_tags, $this->table.name")
+            ->join($this->table, $this->table.'.id', '=', 'merged_tags.tag_id')
+            ->groupBy('merged_tags.tag_id')
+            ->orderBy('total_tags', 'desc')
+            ->limit(10);
+        return $query->get();
     }
 }

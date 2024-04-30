@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class ModuleResource extends Resource
 {
@@ -34,11 +35,17 @@ class ModuleResource extends Resource
                     ->description(fn($operation) => $operation === 'edit' ? 'Update module\'s basic information here.' : 'Please enter module\'s basic information here.')
                     ->schema([
                         Forms\Components\TextInput::make('name')
-                            ->label('Module Name')
+                            ->label('Module')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function ($operation, $state, $set) {
+                                if ($operation === 'edit') return;
+                                $set('slug', Str::slug($state));
+                            }),
                         Forms\Components\TextInput::make('slug')
                             ->required()
+                            ->unique(ignoreRecord: true)
                             ->maxLength(255),
                         Forms\Components\RichEditor::make('description')
                             ->required()
@@ -77,7 +84,7 @@ class ModuleResource extends Resource
                 Tables\Columns\TextColumn::make('description')
                     ->sortable()
                     ->searchable()
-                    ->limit(25)
+                    ->limit(50)
                     ->tooltip(function (Tables\Columns\TextColumn $column): ?string {
                         $state = $column->getState();
                         if (strlen($state) <= $column->getCharacterLimit()) {
@@ -85,6 +92,7 @@ class ModuleResource extends Resource
                         }
                         return $state;
                     })
+                    ->html()
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

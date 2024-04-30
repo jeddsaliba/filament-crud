@@ -63,6 +63,13 @@ class ModuleSeeder extends Seeder
                     'description' => 'Module for managing permissions.',
                     'can_edit' => false,
                     'can_delete' => false
+                ],
+                [
+                    'name' => 'Module',
+                    'slug' => 'module',
+                    'description' => 'Module for managing modules.',
+                    'can_edit' => false,
+                    'can_delete' => false
                 ]
             ]);
     }

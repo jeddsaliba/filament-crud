@@ -47,7 +47,7 @@ class RolePolicy
      */
     public function update(User $user, Role $role): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['UPDATE']);
+        return Helper::checkPermission($user, [], self::abilities['UPDATE']) && $role->can_edit;
     }
 
     /**
@@ -63,7 +63,7 @@ class RolePolicy
      */
     public function restore(User $user, Role $role): bool
     {
-        return Helper::checkPermission($user, [], self::abilities['RESTORE']);
+        return Helper::checkPermission($user, [], self::abilities['RESTORE']) && $role->can_delete;
     }
 
     /**

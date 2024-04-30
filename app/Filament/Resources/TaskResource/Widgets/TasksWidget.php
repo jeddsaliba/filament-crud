@@ -1,14 +1,18 @@
 <?php
 
-namespace App\Filament\Widgets;
+namespace App\Filament\Resources\TaskResource\Widgets;
 
 use App\Models\Task;
+use App\Policies\TaskPolicy;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Number;
 
 class TasksWidget extends BaseWidget
 {
+    protected static ?int $sort = 0;
+
     private $totalTasks;
     private $totalPending;
     private $totalOngoing;
@@ -21,6 +25,7 @@ class TasksWidget extends BaseWidget
         $this->totalOngoing = Task::whereStatusId(2)->count();
         $this->totalCompleted = Task::whereStatusId(3)->count();
     }
+
     protected function getStats(): array
     {
         return [
@@ -34,6 +39,10 @@ class TasksWidget extends BaseWidget
                 ->description(self::getCompletedPercentage())
                 ->color('success'),
         ];
+    }
+    public static function canView(): bool
+    {
+        return (new TaskPolicy())->viewAny(Auth::user());
     }
     private function getPendingPercentage(): string
     {

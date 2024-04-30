@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Module;
+use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +16,10 @@ class ModuleRoleSeeder extends Seeder
     public function run(): void
     {
         $insertData = [];
-        for ($role_id = 1; $role_id < 4; $role_id++) {
-            for ($module_id = 1; $module_id < 8; $module_id++) {
+        $countRoles = Role::count();
+        $countModules = Module::count();
+        for ($role_id = 1; $role_id <= $countRoles; $role_id++) {
+            for ($module_id = 1; $module_id <= $countModules; $module_id++) {
                 $insertData[] = [
                     'role_id' => $role_id,
                     'module_id' => $module_id
