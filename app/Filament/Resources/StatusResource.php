@@ -39,10 +39,21 @@ class StatusResource extends Resource
                         Forms\Components\TextInput::make('name')
                             ->label('Status')
                             ->required()
-                            ->maxLength(255),
+                            ->maxLength(255)
+                            ->columnSpan([
+                                'xl' => 1
+                            ]),
                         Forms\Components\ColorPicker::make('color')
                             ->label('Color')
                             ->unique(ignoreRecord: true)
+                            ->columnSpan([
+                                'xl' => 1
+                            ])
+                    ])
+                    ->columns([
+                        'xl' => 2,
+                        'lg' => 2,
+                        'md' => 2
                     ])
             ]);
     }

@@ -60,15 +60,25 @@ class ModuleResource extends Resource
                         ->afterStateUpdated(function ($operation, $state, $set) {
                             if ($operation === 'edit') return;
                             $set('slug', Str::slug($state));
-                        }),
+                        })
+                        ->columnSpan([
+                            'xl' => 1
+                        ]),
                     Forms\Components\TextInput::make('slug')
                         ->required()
                         ->unique(ignoreRecord: true)
-                        ->maxLength(255),
+                        ->maxLength(255)
+                        ->columnSpan([
+                            'xl' => 1
+                        ]),
                     Forms\Components\RichEditor::make('description')
                         ->required()
                         ->columnSpanFull()
-                ])->columns(2)
+                ])->columns([
+                    'xl' => 2,
+                    'lg' => 1,
+                    'md' => 2
+                ])
             ]);
     }
 

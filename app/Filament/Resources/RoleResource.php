@@ -78,7 +78,12 @@ class RoleResource extends Resource
                                     })
                                     ->bulkToggleable()
                                     ->searchable()
-                                    ->columns(3)
+                                    ->columns([
+                                        'xl' => 3,
+                                        'lg' => 3,
+                                        'md' => 3,
+                                        'sm' => 2
+                                    ])
                             ])
                             ->deletable(false)
                             ->addable(false)
