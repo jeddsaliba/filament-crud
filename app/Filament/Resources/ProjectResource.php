@@ -35,28 +35,52 @@ class ProjectResource extends Resource
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
-                        Forms\Components\Section::make(fn($operation) => $operation === 'edit' ? 'Update Project Information' : 'Create Project Information')
-                            ->description(fn($operation) => $operation === 'edit' ? 'Update your project information here.' : 'Enter your new project information here.')
-                            ->schema([
-                                Forms\Components\Hidden::make('created_by')
-                                    ->dehydrateStateUsing(fn($state) => Auth::id())
-                                    ->hiddenOn('edit'),
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->live(debounce: 500)
-                                    ->columnSpanFull()
-                                    ->afterStateUpdated(function ($operation, $state, $set) {
-                                        if ($operation === 'edit') return;
-                                        $set('slug', Str::slug($state));
-                                    }),
-                                Forms\Components\RichEditor::make('description')
-                                    ->required()
-                                    ->columnSpanFull()
-                                    ->fileAttachmentsDirectory('projects/attachments'),
-                            ])->columnSpan(2)->columns(3),
+                        Forms\Components\Section::make(function($operation) {
+                            $title = 'Project Information';
+                            switch($operation) {
+                                case 'edit': $title = "Update $title"; break;
+                                case 'create': $title = "Create $title"; break;
+                                default: $title; break;
+                            }
+                            return $title;
+                        })
+                        ->description(function($operation) {
+                            $description = null;
+                            switch($operation) {
+                                case 'edit': $description = "Update your project information here."; break;
+                                case 'create': $description = "Enter your new project information here."; break;
+                                default: $description; break;
+                            }
+                            return $description;
+                        })
+                        ->schema([
+                            Forms\Components\Hidden::make('created_by')
+                                ->dehydrateStateUsing(fn($state) => Auth::id())
+                                ->hiddenOn('edit'),
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->maxLength(255)
+                                ->live(debounce: 500)
+                                ->columnSpanFull()
+                                ->afterStateUpdated(function ($operation, $state, $set) {
+                                    if ($operation === 'edit') return;
+                                    $set('slug', Str::slug($state));
+                                }),
+                            Forms\Components\RichEditor::make('description')
+                                ->required()
+                                ->columnSpanFull()
+                                ->fileAttachmentsDirectory('projects/attachments'),
+                        ])->columnSpan(2)->columns(3),
                         Forms\Components\Section::make('Meta')
-                            ->description(fn($operation) => $operation === 'edit' ? 'Update your project meta information here.' : 'Enter your new project meta information here.')
+                            ->description(function($operation) {
+                                $description = null;
+                                switch($operation) {
+                                    case 'edit': $description = "Update your project meta information here."; break;
+                                    case 'create': $description = "Enter your new project meta information here."; break;
+                                    default: $description; break;
+                                }
+                                return $description;
+                            })
                             ->schema([
                                 Forms\Components\FileUpload::make('image')
                                     ->label('Thumbnail')

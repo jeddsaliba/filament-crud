@@ -31,26 +31,42 @@ class ModuleResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Section::make('Module Information')
-                    ->description(fn($operation) => $operation === 'edit' ? 'Update module\'s basic information here.' : 'Please enter module\'s basic information here.')
-                    ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->label('Module')
-                            ->required()
-                            ->maxLength(255)
-                            ->live(debounce: 500)
-                            ->afterStateUpdated(function ($operation, $state, $set) {
-                                if ($operation === 'edit') return;
-                                $set('slug', Str::slug($state));
-                            }),
-                        Forms\Components\TextInput::make('slug')
-                            ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
-                        Forms\Components\RichEditor::make('description')
-                            ->required()
-                            ->columnSpanFull()
-                    ])->columns(2)
+                Forms\Components\Section::make(function($operation) {
+                    $title = 'Module Information';
+                    switch($operation) {
+                        case 'edit': $title = "Update $title"; break;
+                        case 'create': $title = "Create $title"; break;
+                        default: $title; break;
+                    }
+                    return $title;
+                })
+                ->description(function($operation) {
+                    $description = null;
+                    switch($operation) {
+                        case 'edit': $description = "Update module's basic information here."; break;
+                        case 'create': $description = "Please enter module's basic information here."; break;
+                        default: $description; break;
+                    }
+                    return $description;
+                })
+                ->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->label('Module')
+                        ->required()
+                        ->maxLength(255)
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function ($operation, $state, $set) {
+                            if ($operation === 'edit') return;
+                            $set('slug', Str::slug($state));
+                        }),
+                    Forms\Components\TextInput::make('slug')
+                        ->required()
+                        ->unique(ignoreRecord: true)
+                        ->maxLength(255),
+                    Forms\Components\RichEditor::make('description')
+                        ->required()
+                        ->columnSpanFull()
+                ])->columns(2)
             ]);
     }
 
