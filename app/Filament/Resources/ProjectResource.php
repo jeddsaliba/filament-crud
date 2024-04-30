@@ -72,8 +72,9 @@ class ProjectResource extends Resource
                                 ->columnSpanFull()
                                 ->fileAttachmentsDirectory('projects/attachments'),
                         ])->columnSpan([
-                            'lg' => 2
-                        ])->columns(3),
+                            'xl' => 2,
+                            'lg' => 1
+                        ]),
                         Forms\Components\Section::make('Meta')
                             ->description(function($operation) {
                                 $description = null;
@@ -103,9 +104,12 @@ class ProjectResource extends Resource
                                     ->multiple()
                                     ->columnSpanFull()
                             ])->columnSpan([
-                                'lg' => 1
+                                'xl' => 1
                             ])
-                    ])->columns(3)
+                    ])->columns([
+                        'xl' => 3,
+                        'lg' => 1
+                    ])
             ]);
     }
 
@@ -226,5 +230,13 @@ class ProjectResource extends Resource
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
+    }
+    /** Let's you edit deleted record */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

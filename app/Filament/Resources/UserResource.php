@@ -14,6 +14,7 @@ use Filament\Forms\Form;
 use Filament\Infolists\Infolist;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
+use Filament\Support\View\Components\Modal;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Contracts\Support\Htmlable;
@@ -43,30 +44,47 @@ class UserResource extends Resource
             ->schema([
                 Grid::make()
                     ->schema([
-                        Section::make('Basic Information')
-                            ->description(fn($operation) => $operation === 'edit' ? 'Update user\'s basic information here.' : 'Please enter user\'s basic information here.')
-                            ->schema([
-                                Forms\Components\TextInput::make('name')
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->columnSpan(2),
-                                Forms\Components\Select::make('role_id')
-                                    ->label('Role')
-                                    ->relationship('role', 'name')
-                                    ->preload()
-                                    ->searchable()
-                                    ->selectablePlaceholder(false)
-                                    ->required()
-                                    ->default(1)
-                                    ->columnSpan(1),
-                                Forms\Components\TextInput::make('email')
-                                    ->email()
-                                    ->unique(ignoreRecord: true)
-                                    ->required()
-                                    ->maxLength(255)
-                                    ->columnSpanFull()
-                            ])->columnSpan(2)
-                            ->columns(3),
+                        Section::make(function($operation) {
+                            $title = 'Basic Information';
+                            switch($operation) {
+                                case 'edit': $title = "Update $title"; break;
+                                case 'create': $title = "Create $title"; break;
+                                default: $title; break;
+                            }
+                            return $title;
+                        })
+                        ->description(function($operation) {
+                            $description = null;
+                            switch($operation) {
+                                case 'edit': $description = "Update user's basic information here."; break;
+                                case 'create': $description = "Please enter user's basic information here."; break;
+                                default: $description; break;
+                            }
+                            return $description;
+                        })
+                        ->schema([
+                            Forms\Components\TextInput::make('name')
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpan(2),
+                            Forms\Components\Select::make('role_id')
+                                ->label('Role')
+                                ->relationship('role', 'name')
+                                ->preload()
+                                ->searchable()
+                                ->selectablePlaceholder(false)
+                                ->required()
+                                ->default(1)
+                                ->columnSpan(1),
+                            Forms\Components\TextInput::make('email')
+                                ->email()
+                                ->unique(ignoreRecord: true)
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpanFull()
+                        ])
+                        ->columnSpan(2)
+                        ->columns(3),
                         Section::make('Profile Photo')
                             ->description('Upload user\'s profile photo here.')
                             ->schema([
@@ -78,7 +96,15 @@ class UserResource extends Resource
                                     ->imageCropAspectRatio('1:1')
                             ])->columnSpan(1),
                         Section::make('Password Manager')
-                            ->description(fn($operation) => $operation === 'edit' ? 'Update user\'s password here' : 'Please enter user\'s password here')
+                            ->description(function($operation) {
+                                $description = null;
+                                switch($operation) {
+                                    case 'edit': $description = "Update user's password here."; break;
+                                    case 'create': $description = "Please enter user's password here."; break;
+                                    default: $description; break;
+                                }
+                                return $description;
+                            })
                             ->schema([
                                 Forms\Components\TextInput::make('password')
                                     ->password()
@@ -116,7 +142,8 @@ class UserResource extends Resource
                     ->label('Role')
                     ->options(Role::withTrashed()->pluck('name', 'id'))
                     ->selectablePlaceholder(false)
-                    ->sortable(),
+                    ->sortable()
+                    ->action(fn(Modal $modal) => $modal),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -213,7 +240,14 @@ class UserResource extends Resource
             $record->role->name
         ];
     }
-
+    /** Let's you edit deleted record */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::where('id', '!=', Auth::id())->count();

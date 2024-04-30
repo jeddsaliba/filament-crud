@@ -56,32 +56,71 @@ class TaskResource extends Resource
                                     ->afterStateUpdated(function ($operation, $state, $set) {
                                         if ($operation === 'edit') return;
                                         $set('slug', Str::slug($state));
-                                    })->columnSpan(2),
-                                Forms\Components\Select::make('status_id')
-                                    ->default(1)
-                                    ->preload()
-                                    ->relationship('status', 'name')
-                                    ->required()
-                                    ->searchable()
-                                    ->selectablePlaceholder(false),
+                                    })->columnSpan([
+                                        'xl' => 3,
+                                        'lg' => 2,
+                                        'md' => 3,
+                                        'sm' => 2
+                                    ]),
                                 Forms\Components\Select::make('assigned_to')
                                     ->label('Assigned To')
                                     ->relationship('assigned', 'name')
                                     ->selectablePlaceholder(false)
                                     ->searchable()
                                     ->preload()
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpan([
+                                        'xl' => 3,
+                                        'lg' => 2,
+                                        'md' => 3,
+                                        'sm' => 2
+                                    ]),
                                 Forms\Components\DatePicker::make('start_date')
                                     ->default(now())
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpan([
+                                        'xl' => 1,
+                                        'lg' => 1,
+                                        'md' => 1,
+                                        'sm' => 1
+                                    ]),
                                 Forms\Components\DatePicker::make('end_date')
                                     ->default(now())
-                                    ->required(),
+                                    ->required()
+                                    ->columnSpan([
+                                        'xl' => 1,
+                                        'lg' => 1,
+                                        'md' => 1,
+                                        'sm' => 1
+                                    ]),
+                                Forms\Components\Select::make('status_id')
+                                    ->default(1)
+                                    ->preload()
+                                    ->relationship('status', 'name')
+                                    ->required()
+                                    ->searchable()
+                                    ->selectablePlaceholder(false)
+                                    ->columnSpan([
+                                        'xl' => 1,
+                                        'lg' => 1,
+                                        'md' => 1,
+                                        'sm' => 1
+                                    ]),
                                 Forms\Components\RichEditor::make('description')
                                     ->required()
                                     ->fileAttachmentsDirectory('tasks/attachments')
                                     ->columnSpanFull()
-                            ])->columnSpan(2)->columns(3),
+                            ])
+                            ->columns([
+                                'xl' => 3,
+                                'lg' => 2,
+                                'md' => 3,
+                                'sm' => 2
+                            ])
+                            ->columnSpan([
+                                'xl' => 2,
+                                'lg' => 1,
+                            ]),
                         Forms\Components\Section::make('Meta')
                             ->description(fn($operation) => $operation === 'edit' ? 'Update your task meta information here.' : 'Enter your new task meta information here.')
                             ->schema([
@@ -96,8 +135,13 @@ class TaskResource extends Resource
                                     ->placeholder('Select tag(s)')
                                     ->relationship('tags', 'name')
                                     ->searchable()
-                            ])->columnSpan(1)
-                    ])->columns(3)
+                            ])->columnSpan([
+                                'xl' => 1
+                            ])
+                    ])->columns([
+                        'xl' => 3,
+                        'lg' => 1
+                    ])
             ]);
     }
 
@@ -221,6 +265,14 @@ class TaskResource extends Resource
             'Project' => $record->project->name,
             'Assigned To' => $record->assigned->name
         ];
+    }
+    /** Let's you edit deleted record */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
     public static function getNavigationBadge(): ?string
     {

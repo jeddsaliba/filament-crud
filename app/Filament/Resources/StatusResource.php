@@ -116,4 +116,12 @@ class StatusResource extends Resource
             'edit' => Pages\EditStatus::route('/{record}/edit'),
         ];
     }
+    /** Let's you edit deleted record */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 }

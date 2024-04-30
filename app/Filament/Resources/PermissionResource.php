@@ -196,4 +196,12 @@ class PermissionResource extends Resource
             $record->description
         ];
     }
+    /** Let's you edit deleted record */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 }

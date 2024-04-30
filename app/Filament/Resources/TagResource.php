@@ -100,4 +100,12 @@ class TagResource extends Resource
             'edit' => Pages\EditTag::route('/{record}/edit'),
         ];
     }
+    /** Let's you edit deleted record */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
 }

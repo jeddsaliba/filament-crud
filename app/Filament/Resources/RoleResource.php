@@ -37,6 +37,8 @@ class RoleResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
     
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -154,18 +156,12 @@ class RoleResource extends Resource
             'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
     }
+    /** Let's you edit deleted record */
     public static function getEloquentQuery(): Builder
     {
         return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
-            ]);
-    }
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                
             ]);
     }
 }
