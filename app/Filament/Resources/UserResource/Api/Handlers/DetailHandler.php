@@ -26,6 +26,9 @@ class DetailHandler extends Handlers
             ->first();
 
         if (!$query) return static::sendNotFoundResponse();
+        
+        // Get role relationship
+        $query->role;
 
         $transformer = static::getApiTransformer();
 

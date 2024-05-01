@@ -30,6 +30,9 @@ class UpdateHandler extends Handlers {
 
         $model->save();
 
+        // Get role relationship
+        $model->role;
+
         return static::sendSuccessResponse($model, "Successfully Update Resource");
     }
 }

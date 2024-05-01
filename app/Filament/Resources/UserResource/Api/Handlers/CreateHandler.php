@@ -26,6 +26,9 @@ class CreateHandler extends Handlers {
 
         $model->save();
 
+        // Get role relationship
+        $model->role;
+
         return static::sendSuccessResponse($model, "Successfully Create Resource");
     }
 }
