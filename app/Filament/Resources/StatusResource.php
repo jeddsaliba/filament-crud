@@ -38,6 +38,7 @@ class StatusResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->label('Status')
+                            ->unique(ignoreRecord: true)
                             ->required()
                             ->maxLength(255)
                             ->columnSpan([

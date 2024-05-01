@@ -26,7 +26,8 @@ class AuthController extends Controller
         if ($request->type) {
             return redirect('dashboard');
         }
-        $accessToken = $user->data->createToken('abilities', config('abilities'));
+        // $accessToken = $user->data->createToken('abilities', config('abilities'));
+        $accessToken = $user->data->createToken('authToken');
         return response(['status' => $user->status, 'message' => $user->message, 'result' => ['user' => $user->data, 'access_token' => $accessToken->plainTextToken]], HttpServiceProvider::OK);
     }
 }
