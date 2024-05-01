@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class ModulePolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-module',
-        'CREATE' => 'create-module',
-        'UPDATE' => 'update-module',
-        'DELETE' => 'delete-module',
-        'RESTORE' => 'restore-module',
-        'FORCE_DELETE' => 'force-delete-module'
+        'VIEW' => 'module:detail',
+        'CREATE' => 'module:create',
+        'UPDATE' => 'module:update',
+        'DELETE' => 'module:delete',
+        'RESTORE' => 'module:restore',
+        'FORCE_DELETE' => 'module:force-delete',
+        'LIST' => 'module:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */

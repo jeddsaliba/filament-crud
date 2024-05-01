@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class TaskPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-task',
-        'CREATE' => 'create-task',
-        'UPDATE' => 'update-task',
-        'DELETE' => 'delete-task',
-        'RESTORE' => 'restore-task',
-        'FORCE_DELETE' => 'force-delete-task'
+        'VIEW' => 'task:detail',
+        'CREATE' => 'task:create',
+        'UPDATE' => 'task:update',
+        'DELETE' => 'task:delete',
+        'RESTORE' => 'task:restore',
+        'FORCE_DELETE' => 'task:force-delete',
+        'LIST' => 'task:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */

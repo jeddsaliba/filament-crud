@@ -10,13 +10,15 @@ use Illuminate\Support\Facades\Auth;
 class UserPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-user',
-        'CREATE' => 'create-user',
-        'UPDATE' => 'update-user',
-        'DELETE' => 'delete-user',
-        'RESTORE' => 'restore-user',
-        'FORCE_DELETE' => 'force-delete-user'
+        'VIEW' => 'user:detail',
+        'CREATE' => 'user:create',
+        'UPDATE' => 'user:update',
+        'DELETE' => 'user:delete',
+        'RESTORE' => 'user:restore',
+        'FORCE_DELETE' => 'user:force-delete',
+        'LIST' => 'user:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */

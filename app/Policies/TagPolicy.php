@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class TagPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-tag',
-        'CREATE' => 'create-tag',
-        'UPDATE' => 'update-tag',
-        'DELETE' => 'delete-tag',
-        'RESTORE' => 'restore-tag',
-        'FORCE_DELETE' => 'force-delete-tag'
+        'VIEW' => 'tag:detail',
+        'CREATE' => 'tag:create',
+        'UPDATE' => 'tag:update',
+        'DELETE' => 'tag:delete',
+        'RESTORE' => 'tag:restore',
+        'FORCE_DELETE' => 'tag:force-delete',
+        'LIST' => 'tag:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */

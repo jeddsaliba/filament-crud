@@ -10,12 +10,13 @@ use Illuminate\Auth\Access\Response;
 class RolePolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-role',
-        'CREATE' => 'create-role',
-        'UPDATE' => 'update-role',
-        'DELETE' => 'delete-role',
-        'RESTORE' => 'restore-role',
-        'FORCE_DELETE' => 'force-delete-role'
+        'VIEW' => 'role:detail',
+        'CREATE' => 'role:create',
+        'UPDATE' => 'role:update',
+        'DELETE' => 'role:delete',
+        'RESTORE' => 'role:restore',
+        'FORCE_DELETE' => 'role:force-delete',
+        'LIST' => 'role:pagination'
     ];
 
     /**

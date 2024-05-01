@@ -22,7 +22,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 1,
                     'name' => 'Create Project',
-                    'slug' => 'create-project',
+                    'slug' => 'project:create',
                     'description' => 'Ability to create a new project.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -30,7 +30,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 1,
                     'name' => 'Update Project',
-                    'slug' => 'update-project',
+                    'slug' => 'project:update',
                     'description' => 'Ability to update an existing project.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -38,7 +38,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 1,
                     'name' => 'Delete Project',
-                    'slug' => 'delete-project',
+                    'slug' => 'project:delete',
                     'description' => 'Ability to delete a project.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -46,7 +46,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 1,
                     'name' => 'Force Delete Project',
-                    'slug' => 'force-delete-project',
+                    'slug' => 'project:force-delete',
                     'description' => 'Ability to force delete a project.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -54,7 +54,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 1,
                     'name' => 'View Project',
-                    'slug' => 'view-project',
+                    'slug' => 'project:detail',
                     'description' => 'Ability to view a project.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -62,8 +62,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 1,
                     'name' => 'Restore Project',
-                    'slug' => 'restore-project',
+                    'slug' => 'project:restore',
                     'description' => 'Ability to restore a deleted project.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 1,
+                    'name' => 'List Project',
+                    'slug' => 'project:pagination',
+                    'description' => 'Ability to view list of projects.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -77,7 +85,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 2,
                     'name' => 'Create Role',
-                    'slug' => 'create-role',
+                    'slug' => 'role:create',
                     'description' => 'Ability to create a new role.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -85,7 +93,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 2,
                     'name' => 'Update Role',
-                    'slug' => 'update-role',
+                    'slug' => 'role:update',
                     'description' => 'Ability to update an existing role.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -93,7 +101,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 2,
                     'name' => 'Delete Role',
-                    'slug' => 'delete-role',
+                    'slug' => 'role:delete',
                     'description' => 'Ability to delete a role.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -101,7 +109,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 2,
                     'name' => 'Force Delete Role',
-                    'slug' => 'force-delete-role',
+                    'slug' => 'role:force-delete',
                     'description' => 'Ability to force delete a role.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -109,7 +117,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 2,
                     'name' => 'View Role',
-                    'slug' => 'view-role',
+                    'slug' => 'role:detail',
                     'description' => 'Ability to view a role.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -117,8 +125,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 2,
                     'name' => 'Restore Role',
-                    'slug' => 'restore-role',
+                    'slug' => 'role:restore',
                     'description' => 'Ability to restore a deleted role.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 2,
+                    'name' => 'List Role',
+                    'slug' => 'role:pagination',
+                    'description' => 'Ability to view list of roles.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -132,7 +148,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 3,
                     'name' => 'Create Status',
-                    'slug' => 'create-status',
+                    'slug' => 'status:create',
                     'description' => 'Ability to create a new status.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -140,7 +156,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 3,
                     'name' => 'Update Status',
-                    'slug' => 'update-status',
+                    'slug' => 'status:update',
                     'description' => 'Ability to update an existing status.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -148,7 +164,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 3,
                     'name' => 'Delete Status',
-                    'slug' => 'delete-status',
+                    'slug' => 'status:delete',
                     'description' => 'Ability to delete a status.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -156,7 +172,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 3,
                     'name' => 'Force Delete Status',
-                    'slug' => 'force-delete-status',
+                    'slug' => 'status:force-delete',
                     'description' => 'Ability to force delete a status.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -164,7 +180,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 3,
                     'name' => 'View Status',
-                    'slug' => 'view-status',
+                    'slug' => 'status:detail',
                     'description' => 'Ability to view a status.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -172,8 +188,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 3,
                     'name' => 'Restore Status',
-                    'slug' => 'restore-status',
+                    'slug' => 'status:restore',
                     'description' => 'Ability to restore a deleted status.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 3,
+                    'name' => 'List Status',
+                    'slug' => 'status:pagination',
+                    'description' => 'Ability to view list of statuses.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -187,7 +211,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 4,
                     'name' => 'Create Tag',
-                    'slug' => 'create-tag',
+                    'slug' => 'tag:create',
                     'description' => 'Ability to create a new tag.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -195,7 +219,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 4,
                     'name' => 'Update Tag',
-                    'slug' => 'update-tag',
+                    'slug' => 'tag:update',
                     'description' => 'Ability to update an existing tag.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -203,7 +227,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 4,
                     'name' => 'Delete Tag',
-                    'slug' => 'delete-tag',
+                    'slug' => 'tag:delete',
                     'description' => 'Ability to delete a tag.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -211,7 +235,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 4,
                     'name' => 'Force Delete Tag',
-                    'slug' => 'force-delete-tag',
+                    'slug' => 'tag:force-delete',
                     'description' => 'Ability to force delete a tag.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -219,7 +243,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 4,
                     'name' => 'View Tag',
-                    'slug' => 'view-tag',
+                    'slug' => 'tag:detail',
                     'description' => 'Ability to view a tag.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -227,8 +251,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 4,
                     'name' => 'Restore Tag',
-                    'slug' => 'restore-tag',
+                    'slug' => 'tag:restore',
                     'description' => 'Ability to restore a deleted tag.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 4,
+                    'name' => 'List Tag',
+                    'slug' => 'tag:pagination',
+                    'description' => 'Ability to view list of tags.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -242,7 +274,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 5,
                     'name' => 'Create Task',
-                    'slug' => 'create-task',
+                    'slug' => 'task:create',
                     'description' => 'Ability to create a new task.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -250,7 +282,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 5,
                     'name' => 'Update Task',
-                    'slug' => 'update-task',
+                    'slug' => 'task:update',
                     'description' => 'Ability to update an existing task.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -258,7 +290,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 5,
                     'name' => 'Delete Task',
-                    'slug' => 'delete-task',
+                    'slug' => 'task:delete',
                     'description' => 'Ability to delete a task.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -266,7 +298,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 5,
                     'name' => 'Force Delete Task',
-                    'slug' => 'force-delete-task',
+                    'slug' => 'task:force-delete',
                     'description' => 'Ability to force delete a task.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -274,7 +306,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 5,
                     'name' => 'View Task',
-                    'slug' => 'view-task',
+                    'slug' => 'task:detail',
                     'description' => 'Ability to view a task.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -282,8 +314,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 5,
                     'name' => 'Restore Task',
-                    'slug' => 'restore-task',
+                    'slug' => 'task:restore',
                     'description' => 'Ability to restore a deleted task.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 5,
+                    'name' => 'List Task',
+                    'slug' => 'task:pagination',
+                    'description' => 'Ability to view list of tasks.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -297,7 +337,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 6,
                     'name' => 'Create User',
-                    'slug' => 'create-user',
+                    'slug' => 'user:create',
                     'description' => 'Ability to create a new user.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -305,7 +345,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 6,
                     'name' => 'Update User',
-                    'slug' => 'update-user',
+                    'slug' => 'user:update',
                     'description' => 'Ability to update an existing user.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -313,7 +353,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 6,
                     'name' => 'Delete User',
-                    'slug' => 'delete-user',
+                    'slug' => 'user:delete',
                     'description' => 'Ability to delete a user.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -321,7 +361,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 6,
                     'name' => 'Force Delete User',
-                    'slug' => 'force-delete-user',
+                    'slug' => 'user:force-delete',
                     'description' => 'Ability to force delete a user.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -329,7 +369,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 6,
                     'name' => 'View User',
-                    'slug' => 'view-user',
+                    'slug' => 'user:detail',
                     'description' => 'Ability to view a user.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -337,8 +377,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 6,
                     'name' => 'Restore User',
-                    'slug' => 'restore-user',
+                    'slug' => 'user:restore',
                     'description' => 'Ability to restore a deleted user.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 6,
+                    'name' => 'List User',
+                    'slug' => 'user:pagination',
+                    'description' => 'Ability to view list of users.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -351,7 +399,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 7,
                     'name' => 'Create Permission',
-                    'slug' => 'create-permission',
+                    'slug' => 'permission:create',
                     'description' => 'Ability to create a new permission.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -359,7 +407,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 7,
                     'name' => 'Update Permission',
-                    'slug' => 'update-permission',
+                    'slug' => 'permission:update',
                     'description' => 'Ability to update an existing permission.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -367,7 +415,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 7,
                     'name' => 'Delete Permission',
-                    'slug' => 'delete-permission',
+                    'slug' => 'permission:delete',
                     'description' => 'Ability to delete a permission.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -375,7 +423,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 7,
                     'name' => 'Force Delete Permission',
-                    'slug' => 'force-delete-permission',
+                    'slug' => 'permission:force-delete',
                     'description' => 'Ability to force delete a permission.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -383,7 +431,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 7,
                     'name' => 'View Permission',
-                    'slug' => 'view-permission',
+                    'slug' => 'permission:detail',
                     'description' => 'Ability to view a permission.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -391,8 +439,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 7,
                     'name' => 'Restore Permission',
-                    'slug' => 'restore-permission',
+                    'slug' => 'permission:restore',
                     'description' => 'Ability to restore a deleted permission.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 7,
+                    'name' => 'List Permission',
+                    'slug' => 'permission:pagination',
+                    'description' => 'Ability to view list of permissions.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]
@@ -405,7 +461,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 8,
                     'name' => 'Create Module',
-                    'slug' => 'create-module',
+                    'slug' => 'module:create',
                     'description' => 'Ability to create a new module.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -413,7 +469,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 8,
                     'name' => 'Update Module',
-                    'slug' => 'update-module',
+                    'slug' => 'module:update',
                     'description' => 'Ability to update an existing module.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -421,7 +477,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 8,
                     'name' => 'Delete Module',
-                    'slug' => 'delete-module',
+                    'slug' => 'module:delete',
                     'description' => 'Ability to delete a module.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -429,7 +485,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 8,
                     'name' => 'Force Delete Module',
-                    'slug' => 'force-delete-module',
+                    'slug' => 'module:force-delete',
                     'description' => 'Ability to force delete a module.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -437,7 +493,7 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 8,
                     'name' => 'View Module',
-                    'slug' => 'view-module',
+                    'slug' => 'module:detail',
                     'description' => 'Ability to view a module.',
                     'can_edit' => false,
                     'can_delete' => false
@@ -445,8 +501,16 @@ class PermissionSeeder extends Seeder
                 [
                     'module_id' => 8,
                     'name' => 'Restore Module',
-                    'slug' => 'restore-module',
+                    'slug' => 'module:restore',
                     'description' => 'Ability to restore a deleted module.',
+                    'can_edit' => false,
+                    'can_delete' => false
+                ],
+                [
+                    'module_id' => 8,
+                    'name' => 'List Module',
+                    'slug' => 'module:pagination',
+                    'description' => 'Ability to view list of modules.',
                     'can_edit' => false,
                     'can_delete' => false
                 ]

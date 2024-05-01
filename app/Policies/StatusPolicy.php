@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class StatusPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-status',
-        'CREATE' => 'create-status',
-        'UPDATE' => 'update-status',
-        'DELETE' => 'delete-status',
-        'RESTORE' => 'restore-user',
-        'FORCE_DELETE' => 'force-delete-status'
+        'VIEW' => 'status:detail',
+        'CREATE' => 'status:create',
+        'UPDATE' => 'status:update',
+        'DELETE' => 'status:delete',
+        'RESTORE' => 'status:restore',
+        'FORCE_DELETE' => 'status:force-delete',
+        'LIST' => 'status:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */

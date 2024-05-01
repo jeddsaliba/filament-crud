@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class PermissionPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-permission',
-        'CREATE' => 'create-permission',
-        'UPDATE' => 'update-permission',
-        'DELETE' => 'delete-permission',
-        'RESTORE' => 'restore-permission',
-        'FORCE_DELETE' => 'force-delete-permission'
+        'VIEW' => 'permission:detail',
+        'CREATE' => 'permission:create',
+        'UPDATE' => 'permission:update',
+        'DELETE' => 'permission:delete',
+        'RESTORE' => 'permission:restore',
+        'FORCE_DELETE' => 'permission:force-delete',
+        'LIST' => 'permission:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */

@@ -75,6 +75,11 @@ class User extends Authenticatable
         return $this->hasMany(Task::class, 'created_by');
     }
 
+    public function hasRole(): HasOne
+    {
+        return $this->hasOne(Role::class, 'id', 'role_id')->withTrashed();
+    }
+
     /**
      * API STARTS HERE
      */

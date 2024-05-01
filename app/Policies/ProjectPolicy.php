@@ -10,13 +10,15 @@ use Illuminate\Auth\Access\Response;
 class ProjectPolicy
 {
     CONST abilities = [
-        'VIEW' => 'view-project',
-        'CREATE' => 'create-project',
-        'UPDATE' => 'update-project',
-        'DELETE' => 'delete-project',
-        'RESTORE' => 'restore-project',
-        'FORCE_DELETE' => 'force-delete-project'
+        'VIEW' => 'project:detail',
+        'CREATE' => 'project:create',
+        'UPDATE' => 'project:update',
+        'DELETE' => 'project:delete',
+        'RESTORE' => 'project:restore',
+        'FORCE_DELETE' => 'project:force-delete',
+        'LIST' => 'project:pagination'
     ];
+
     /**
      * Determine whether the user can view any models.
      */
